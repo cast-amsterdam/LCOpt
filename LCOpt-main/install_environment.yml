@@ -1,0 +1,13 @@
+name: lcopt_env
+channels:
+  - defaults
+dependencies:
+  - python=3.10.12
+  - pip
+  - pip:
+    - cma==3.3.0
+    - scikit-learn==1.2.2
+    - pygad==3.2.0
+    - tqdm
+    - scikit-optimize==0.9.0
+
