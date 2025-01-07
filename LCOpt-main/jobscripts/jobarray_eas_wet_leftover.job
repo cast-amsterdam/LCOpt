@@ -1,0 +1,65 @@
+#!/bin/bash
+#SBATCH --partition=thin
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=16
+#SBATCH --time=02:45:00
+#SBATCH --job-name=ea_wet
+#SBATCH --array=1-120   # Adjust the range (1-n) to the number of n instances you want to run
+#SBATCH --output=logs/output_ea_wet_%A_%a.log
+#SBATCH --error=logs/error_ea_wet_%A_%a.log
+
+# Load any required modules or environments (if needed)
+module purge
+module load 2021
+module load Anaconda3/2021.05
+
+# Your job starts in the directory where you call sbatch
+# Activate your environment
+
+source activate LC
+
+# Change to the working directory (where your Python script is located)
+cd $HOME/Projects/LCOpt
+
+algos=("GenAlgo" "CMA" "DiffEvo")
+segments=(1 2 3 4)
+repeats=(10)
+iters=(1000)
+samples=("sample_real")
+wet=(True)
+# note that peak_purity only uses dry, and is super expensive.
+# note that everything using Kaiser uses wet, these are sum_of_kais, prod_of_kais, tyteca28, tyteca35, tyteca40
+crfs=('sum_of_res' 'prod_of_res' 'tyteca11' 'tyteca24' 'crf' 'sum_of_kais' 'prod_of_kais' 'tyteca28' 'tyteca35' 'tyteca40')
+
+# how many combinations will this give?
+# 3 algos * 4 segments * 1 repeat * 1 iter * 1 samples * 1 wet * 10 crfs = 1320
+
+
+# Calculate the indices for each option based on the task ID
+task_id=$((SLURM_ARRAY_TASK_ID - 1))
+algo_index=$((task_id % 3))
+task_id=$((task_id / 3))
+segment_index=$((task_id % 4))
+task_id=$((task_id / 4))
+repeat_index=$((task_id % 1))
+task_id=$((task_id / 1))
+iter_index=$((task_id % 1))
+task_id=$((task_id / 1))
+sample_index=$((task_id % 11))
+task_id=$((task_id / 11))
+wet_index=$((task_id % 1))
+task_id=$((task_id / 1))
+crf_index=$((task_id % 10))
+
+# Retrieve the specific options for each parameter based on the calculated indices
+algo=${algos[algo_index]}
+segment=${segments[segment_index]}
+repeat=${repeats[repeat_index]}
+iter=${iters[iter_index]}
+sample=${samples[sample_index]}
+wet_value=${wet[wet_index]}
+crf=${crfs[crf_index]}
+
+# Execute your Python script with the selected options
+srun python meta_experiment.py "$algo" "$segment" "$repeat" "$iter" "$sample" "$wet_value" "$crf"
+
