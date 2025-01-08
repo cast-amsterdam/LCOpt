@@ -1,12 +1,14 @@
 # LC Gradient Profile Optimization
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1oaOq1I8jeYaumZOiFN8RAz8r9nK6EZNJ?usp=sharing)
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1LOgRdRSoygmwW0qPK6zpT9rJ0_fdKFNA?usp=sharing)
 
 This directory contains Python code for creating computer simulations of chromatographic experiments and applying optimization algorithms to gradient profile optimization.
 
 To cite:
-TODO
+van Henten et al. 2024 JCA Comparison of Optimization Algorithms for Automated Method Development of Gradient Profiles
+
+DOI:https://doi.org/10.1016/j.chroma.2024.465626
 
 ## Installation
 
